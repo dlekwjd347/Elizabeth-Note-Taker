@@ -1,0 +1,25 @@
+{
+  "name": "note-taker",
+  "version": "1.0.0",
+  "description": "## Description",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "elizabeth lee",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "uuidv4": "^6.2.2"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dlekwjd347/Elizabeth-Note-Taker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dlekwjd347/Elizabeth-Note-Taker/issues"
+  },
+  "homepage": "https://github.com/dlekwjd347/Elizabeth-Note-Taker#readme"
+}
