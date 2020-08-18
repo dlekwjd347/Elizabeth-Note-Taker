@@ -4,9 +4,10 @@
 // These data sources hold arrays of information on table-data, waitinglist, etc.
 // ===============================================================================
 
-const noteData = require("../db/db.json");
+let noteData = require("../db/db.json");
 const fs = require("fs");
 const uuid = require("uuidv4");
+const path = require("path");
 
 
 // ===============================================================================
@@ -30,38 +31,34 @@ module.exports = function (app) {
       text: req.body.text
     };
 
-    fs.readFile("../db/db.json", "utf-8", (err, data) => {
-      if (err) throw err;
-      console.log(data);
-    });
+    notesData.push(newNote);
 
-    const notesInput = JSON.parse(data);
-    notesInput.push(newNote)
-
-    fs.writeFile('../db/db.json', JSON.stringify(notesInput, null, 2), (err) => {
-      if (err) throw err;
-      res.send(noteData);
-      console.log('The note has been saved!');
+    fs.writeFile(path.join(__dirname, "../db/db.json"), JSON.stringify(notesData), err => {
+      if (err) { console.log(err) }
+      res.send(newNote);
+      console.log("The note has been saved!");
     
-      fs.writeFileSync(noteData, notesInput, 'utf-8')
-    });
-
   })
 
-  app.delete("/api/notes/:id", function (req, res) {
-    //  below to get to the ID and reference it
-    let noteId = req.params.id;
+  app.delete("/api/notes/:id", (req, res) => {
+    let noteID = req.params.id;
 
-    fs.readFile("./db/db.json", "utf8", (err, data) => {
-      if (err) throw err;
-      let noteData = noteData.filter((e, i) => i != noteId);
-   
-      fs.writeFile("./db/db.json", JSON.stringify(noteData, null, 2), err => {
-        if (err) throw err;
-        res.send(noteData)
-        console.log("The note has been deleted!");
+    fs.readFile(path.join(__dirname, "../db/db.json"), "utf8", (err, data) => {
+        if (err) { console.log(err) }
+        const notesInput = JSON.parse(data);
+        const filterNotes = notesInput.filter((note) => {
+            return note.id !== noteID
+        });
+
+
+        fs.writeFile(path.join(__dirname, "../db/db.json"), JSON.stringify(filterNotes), err => {
+            if (err) { console.log(err) }
+            console.log(filterNotes);
+            res.send(filterNotes);
+            console.log("The note has been deleted!")
       });
     })
   })
 
-  };
+})
+}
